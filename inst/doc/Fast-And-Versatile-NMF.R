@@ -25,13 +25,14 @@ set.seed(123);
 k <- 15;
 init <- list(W = matrix(runif(nrow(nsclc)*k), ncol = k),
 	H = matrix(runif(ncol(nsclc)*k), nrow = k));
-scd.mse  <- nnmf(nsclc, k, init = init, max.iter = 100, rel.tol = -1);
-lee.mse  <- nnmf(nsclc, k, init = init, max.iter = 100, rel.tol = -1, method = 'lee');
-scd.mkl  <- nnmf(nsclc, k, init = init, max.iter = 5000, rel.tol = -1, loss = 'mkl');
+# Set rel.tol = -1 to prevent from early stop, just for comparison purpose
+scd.mse  <- nnmf(nsclc, k, init = init, max.iter = 100, rel.tol = -1, show.warning = FALSE);
+lee.mse  <- nnmf(nsclc, k, init = init, max.iter = 100, rel.tol = -1, method = 'lee', show.warning = FALSE);
+scd.mkl  <- nnmf(nsclc, k, init = init, max.iter = 5000, rel.tol = -1, loss = 'mkl', show.warning = FALSE);
 lee.mkl  <- nnmf(nsclc, k, init = init, max.iter = 5000, rel.tol = -1, loss = 'mkl',
-	method = 'lee');
+	method = 'lee', show.warning = FALSE);
 lee.mse1 <- nnmf(nsclc, k, init = init, max.iter = 5000, rel.tol = -1, method = 'lee',
-	inner.max.iter = 1);
+	inner.max.iter = 1, show.warning = FALSE);
 
 ## ----alg-comp-plot, fig.show = 'hold'------------------------------------
 plot(NULL, xlim = c(1, 3000), ylim = c(0.15, 0.45), xlab = 'Epochs', ylab = 'MSE');
@@ -126,9 +127,9 @@ if (!require(ISOpureR)) {
 
 path.to.data <- file.path(system.file(package = 'ISOpureR'), 'extdata/Beer');
 # normal profile
-load(file.path(path.to.data, 'beer.normaldata.1000.transcripts.RData'));
+load(file.path(path.to.data, 'beer.normaldata.250.transcripts.RData'));
 # transcriptome of 30 patients (part of the Beer dataset)
-load(file.path(path.to.data, 'beer.tumordata.1000.transcripts.30.patients.RData'));
+load(file.path(path.to.data, 'beer.tumordata.250.transcripts.30.patients.RData'));
 
 # assume k = 3, beer.normaldata is the known healthy profile
 beer.nmf <- nnmf(beer.tumordata, k = 3, init = list(W0 = beer.normaldata));
