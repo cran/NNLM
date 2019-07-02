@@ -1,6 +1,7 @@
 ## ----setup, echo = FALSE, message = FALSE--------------------------------
 library(knitr);
 opts_chunk$set(cache = TRUE, autodep = TRUE);
+suppressWarnings(RNGversion("3.5.0"));
 
 ## ----install, echo = TRUE, eval = FALSE----------------------------------
 #  install.packages("NNLM");
@@ -134,17 +135,17 @@ load(file.path(path.to.data, 'beer.tumordata.250.transcripts.30.patients.RData')
 # assume k = 3, beer.normaldata is the known healthy profile
 beer.nmf <- nnmf(beer.tumordata, k = 3, init = list(W0 = beer.normaldata));
 
-# compute proportion of tumour content
+# compute proportion of tumor content
 tm.frac.nmf <- with(beer.nmf, colSums(W[,1:3] %*% H[1:3,])/colSums(W %*% H));
 
-# tumour content from ISOpureR using the full dataset
+# tumor content from ISOpureR using the full dataset
 tm.frac.full <- read.delim(file.path(path.to.data, "alphapurities_full_dataset.txt"));
 
 ## ----isopure-plot, fig.align = 'center', fig.width = 5, fig.height = 5----
 plot(tm.frac.full$alphapurities*100, tm.frac.nmf*100,
 	xlim = c(20, 100), ylim = c(20, 100), col = 'firebrick1',
-	xlab = "% tumour from ISOpureR full data",
-	ylab = "% tumour from NMF partial data");
+	xlab = "% tumor from ISOpureR full data",
+	ylab = "% tumor from NMF partial data");
 abline(a = 0, b = 1, lty = 2)
 
 ## ----missing-data, fig.show = 'hold', message = FALSE--------------------
